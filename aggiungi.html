@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Marconi Link - Aggiungi Post</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>Marconi Link</h1>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="circolari.html">Circolari</a>
+    <a href="eventi.html">Eventi</a>
+    <a href="appunti.html">Appunti</a>
+    <a href="aggiungi.html">Aggiungi Post</a>
+  </nav>
+</header>
+
+<main>
+  <h2>Aggiungi un nuovo post</h2>
+  <form id="postForm">
+    <input type="text" id="title" placeholder="Titolo" required>
+    <select id="category">
+      <option value="circolari">Circolari</option>
+      <option value="eventi">Eventi</option>
+      <option value="appunti">Appunti e Risorse</option>
+    </select>
+    <textarea id="content" rows="6" placeholder="Testo del post" required></textarea>
+    <button type="submit">Pubblica</button>
+  </form>
+</main>
+
+<footer>
+  &copy; 2025 Marconi Link - Tutti i diritti riservati
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
