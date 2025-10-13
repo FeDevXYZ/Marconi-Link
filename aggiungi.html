@@ -2,40 +2,316 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>Marconi Link - Aggiungi Post</title>
-<link rel="stylesheet" href="style.css">
+<title>Marconi Link</title>
+<style>
+/* --- Stile generale --- */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #e6f0f8; /* azzurro moderno vetro */
+  color: #222;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background-color: rgba(173, 216, 230, 0.9); /* azzurro trasparente */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+header .left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+header .left img {
+  width: 35px;
+  cursor: pointer;
+}
+
+header nav a {
+  text-decoration: none;
+  color: #222;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+header nav a:hover {
+  color: #007ACC;
+}
+
+header .right {
+  font-weight: bold;
+  font-size: 1.2em;
+  color: #007ACC;
+}
+
+/* --- Container principale --- */
+main {
+  margin-top: 80px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 15px;
+}
+
+/* --- Post --- */
+.post {
+  background-color: white;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: transform 0.2s;
+}
+
+.post:hover {
+  transform: translateY(-3px);
+}
+
+.post h2 {
+  margin-top: 0;
+  color: #007ACC;
+}
+
+.post .date {
+  font-size: 0.85em;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+/* --- Form pubblica --- */
+form {
+  background-color: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+form input, form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+form button {
+  background-color: #007ACC;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+form button:hover {
+  background-color: #005f99;
+}
+
+/* --- Login admin --- */
+#loginModal {
+  position: fixed;
+  top: 0; left:0; right:0; bottom:0;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+#loginModal .modal-content {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+}
+
+#loginModal input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+#loginModal button {
+  width: 100%;
+  padding: 10px;
+  background: #007ACC;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#loginModal button:hover {
+  background: #005f99;
+}
+
+/* --- Pagine dinamiche --- */
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+</style>
 </head>
 <body>
 
 <header>
-  <h1>Marconi Link</h1>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="circolari.html">Circolari</a>
-    <a href="eventi.html">Eventi</a>
-    <a href="appunti.html">Appunti</a>
-    <a href="aggiungi.html">Aggiungi Post</a>
-  </nav>
+  <div class="left">
+    <img src="https://cdn-icons-png.flaticon.com/512/1177/1177568.png" id="profileIcon" title="Accesso admin">
+    <nav>
+      <a href="#" data-page="home">Home</a>
+      <a href="#" data-page="annunci">Annunci</a>
+      <a href="#" data-page="risorse">Risorse</a>
+      <a href="#" data-page="pubblica">Pubblica</a>
+    </nav>
+  </div>
+  <div class="right">Marconi Link</div>
 </header>
 
 <main>
-  <h2>Aggiungi un nuovo post</h2>
-  <form id="postForm">
-    <input type="text" id="title" placeholder="Titolo" required>
-    <select id="category">
-      <option value="circolari">Circolari</option>
-      <option value="eventi">Eventi</option>
-      <option value="appunti">Appunti e Risorse</option>
-    </select>
-    <textarea id="content" rows="6" placeholder="Testo del post" required></textarea>
-    <button type="submit">Pubblica</button>
-  </form>
+  <!-- Home -->
+  <div id="home" class="page active">
+    <h2>Home</h2>
+    <div id="homePosts"></div>
+  </div>
+
+  <!-- Annunci -->
+  <div id="annunci" class="page">
+    <h2>Annunci</h2>
+    <div id="annunciPosts"></div>
+  </div>
+
+  <!-- Risorse -->
+  <div id="risorse" class="page">
+    <h2>Risorse</h2>
+    <div id="risorsePosts"></div>
+  </div>
+
+  <!-- Pubblica -->
+  <div id="pubblica" class="page">
+    <h2>Pubblica un post</h2>
+    <form id="postForm">
+      <input type="text" id="title" placeholder="Titolo del post" required>
+      <textarea id="content" rows="5" placeholder="Testo del post" required></textarea>
+      <label><input type="checkbox" id="rememberMe"> Ricordami</label><br><br>
+      <button type="submit">Pubblica</button>
+    </form>
+  </div>
 </main>
 
-<footer>
-  &copy; 2025 Marconi Link - Tutti i diritti riservati
-</footer>
+<!-- Modal Login -->
+<div id="loginModal">
+  <div class="modal-content">
+    <h3>Accesso Admin</h3>
+    <input type="password" id="adminCode" placeholder="Inserisci codice">
+    <label><input type="checkbox" id="loginRemember"> Ricordami</label><br><br>
+    <button id="loginBtn">Accedi</button>
+  </div>
+</div>
 
-<script src="script.js"></script>
+<script>
+// --- Gestione navigazione ---
+const pages = document.querySelectorAll('.page');
+document.querySelectorAll('header nav a').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const target = link.dataset.page;
+    pages.forEach(p => p.classList.remove('active'));
+    document.getElementById(target).classList.add('active');
+  });
+});
+
+// --- Post lato client ---
+let posts = [];
+
+function renderPosts() {
+  const homeContainer = document.getElementById('homePosts');
+  const annunciContainer = document.getElementById('annunciPosts');
+  const risorseContainer = document.getElementById('risorsePosts');
+
+  homeContainer.innerHTML = '';
+  annunciContainer.innerHTML = '';
+  risorseContainer.innerHTML = '';
+
+  posts.forEach(post => {
+    const div = document.createElement('div');
+    div.className = 'post';
+    div.innerHTML = `<h2>${post.title}</h2>
+                     <div class="date">${post.date} - ${post.category}</div>
+                     <p>${post.content}</p>`;
+
+    homeContainer.appendChild(div);
+    if(post.category==='Annuncio') annunciContainer.appendChild(div.cloneNode(true));
+    if(post.category==='Risorsa') risorseContainer.appendChild(div.cloneNode(true));
+  });
+}
+
+// --- Login admin ---
+const profileIcon = document.getElementById('profileIcon');
+const loginModal = document.getElementById('loginModal');
+const loginBtn = document.getElementById('loginBtn');
+let isAdmin = false;
+
+profileIcon.addEventListener('click', () => {
+  loginModal.style.display = 'flex';
+});
+
+loginBtn.addEventListener('click', () => {
+  const code = document.getElementById('adminCode').value;
+  const remember = document.getElementById('loginRemember').checked;
+  if(code === "12345"){ // codice admin di esempio
+    isAdmin = true;
+    loginModal.style.display = 'none';
+    alert("Accesso riuscito!");
+    if(remember) localStorage.setItem('adminLogin', 'true');
+  } else {
+    alert("Codice errato!");
+  }
+});
+
+// --- Ricordami login ---
+if(localStorage.getItem('adminLogin')==='true') isAdmin = true;
+
+// --- Form pubblicazione ---
+const postForm = document.getElementById('postForm');
+postForm.addEventListener('submit', e=>{
+  e.preventDefault();
+  if(!isAdmin){
+    alert("Solo gli admin possono pubblicare!");
+    return;
+  }
+  const title = document.getElementById('title').value;
+  const content = document.getElementById('content').value;
+  const category = 'Annuncio'; // fisso, solo admin può decidere
+  const date = new Date().toLocaleDateString();
+  posts.unshift({title, content, category, date});
+  renderPosts();
+  postForm.reset();
+});
+</script>
+
 </body>
 </html>
